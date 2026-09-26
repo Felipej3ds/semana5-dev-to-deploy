@@ -1,5 +1,5 @@
 async function getHealth() {
-  const res = await fetch('http://localhost:8000/api/health/', { cache: 'no-store' });
+  const res = await fetch('http://backend:8000/api/health/', { cache: 'no-store' });
   return res.json();
 }
 
