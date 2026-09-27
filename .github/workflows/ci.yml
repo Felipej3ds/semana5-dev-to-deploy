@@ -98,6 +98,7 @@ jobs:
       - name: Run tests
         working-directory: frontend
         run: npm test -- --passWithNoTests
+
   deploy-backend:
     needs: test-backend
     runs-on: ubuntu-latest
@@ -119,8 +120,8 @@ jobs:
           file: ./backend/Dockerfile.prod
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-backend:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-backend:${{ github.sha }}
+            ghcr.io/felipej3ds/semana5-dev-to-deploy-backend:latest
+            ghcr.io/felipej3ds/semana5-dev-to-deploy-backend:${{ github.sha }}
 
   deploy-frontend:
     needs: test-frontend
@@ -143,5 +144,5 @@ jobs:
           file: ./frontend/Dockerfile.prod
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-frontend:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}-frontend:${{ github.sha }}
+            ghcr.io/felipej3ds/semana5-dev-to-deploy-frontend:latest
+            ghcr.io/felipej3ds/semana5-dev-to-deploy-frontend:${{ github.sha }}
