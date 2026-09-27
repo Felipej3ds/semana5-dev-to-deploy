@@ -1,0 +1,19 @@
+FROM python:3.12-alpine
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN apk add --no-cache libpq && \
+    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+    pip install --no-cache-dir -r requirements.txt gunicorn && \
+    apk del .build-deps
+
+COPY . .
+
+RUN adduser -D appuser
+USER appuser
+
+EXPOSE 8000
+
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
