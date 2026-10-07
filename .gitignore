@@ -15,3 +15,5 @@ Thumbs.dbgit log --oneline
 firebase-debug.log
 .firebase/
 *service-account*.json
+
+firestore-debug.log
