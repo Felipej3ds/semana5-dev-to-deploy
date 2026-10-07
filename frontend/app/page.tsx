@@ -76,7 +76,7 @@ export default function Home() {
 
       {data && (
         <>
-          <h1>Status: {data.status}</h1>
+          <h1>Status (Versão B): {data.status}</h1>
           <ul>
             {data.items.map((item, index) => (
               <li key={index}>{item}</li>
