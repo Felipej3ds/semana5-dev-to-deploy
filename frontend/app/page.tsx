@@ -1,27 +1,62 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { initializeApp, getApps } from "firebase/app";
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+  collection,
+  getDocs,
+} from "firebase/firestore";
 
-type HealthResponse = {
+type DataResponse = {
   status: string;
   items: string[];
 };
 
+const DATA_SOURCE = process.env.NEXT_PUBLIC_DATA_SOURCE || "api";
+const USE_EMULATOR = process.env.NEXT_PUBLIC_USE_EMULATOR === "true";
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/health/";
 
+async function fetchFromApi(): Promise<DataResponse> {
+  const res = await fetch(API_URL, { cache: "no-store" });
+  if (!res.ok) throw new Error("bad response");
+  return res.json();
+}
+
+async function fetchFromFirestore(): Promise<DataResponse> {
+  const app =
+    getApps()[0] ??
+    initializeApp({
+      projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "demo-semana6",
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "demo-key",
+    });
+  const db = getFirestore(app);
+  if (USE_EMULATOR) {
+    try {
+      connectFirestoreEmulator(db, "127.0.0.1", 8080);
+    } catch {
+      // já conectado (hot reload)
+    }
+  }
+  const snap = await getDocs(collection(db, "items"));
+  const items = snap.docs
+    .map((d) => d.data())
+    .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
+    .map((d) => String(d.nome));
+  return { status: "ok", items };
+}
+
 export default function Home() {
-  const [data, setData] = useState<HealthResponse | null>(null);
+  const [data, setData] = useState<DataResponse | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(API_URL, { cache: "no-store" })
-      .then((res) => {
-        if (!res.ok) throw new Error("bad response");
-        return res.json();
-      })
-      .then((json: HealthResponse) => setData(json))
+    const load = DATA_SOURCE === "firestore" ? fetchFromFirestore : fetchFromApi;
+    load()
+      .then(setData)
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
