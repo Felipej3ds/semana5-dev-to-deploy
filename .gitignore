@@ -11,3 +11,9 @@ db.sqlite3
 # Sistema
 .DS_Store
 Thumbs.dbgit log --oneline
+
+firebase-debug.log
+.firebase/
+*service-account*.json
+
+firestore-debug.log

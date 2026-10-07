@@ -1,0 +1,17 @@
+{
+  "firestore": {
+    "database": "(default)",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "frontend/out",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "emulators": {
+    "hosting": { "port": 5000 },
+    "firestore": { "port": 8080 },
+    "ui": { "enabled": true, "port": 4000 },
+    "singleProjectMode": true
+  }
+}
