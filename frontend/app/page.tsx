@@ -17,7 +17,7 @@ type DataResponse = {
 const DATA_SOURCE = process.env.NEXT_PUBLIC_DATA_SOURCE || "api";
 const USE_EMULATOR = process.env.NEXT_PUBLIC_USE_EMULATOR === "true";
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/health/";
+  process.env.NEXT_PUBLIC_API_URL || "/api/health/";
 
 async function fetchFromApi(): Promise<DataResponse> {
   const res = await fetch(API_URL, { cache: "no-store" });
