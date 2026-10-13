@@ -17,3 +17,5 @@ firebase-debug.log
 *service-account*.json
 
 firestore-debug.log
+nginx/certs/*.key
+nginx/certs/*.crt
